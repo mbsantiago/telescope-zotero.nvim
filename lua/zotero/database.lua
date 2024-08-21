@@ -65,6 +65,13 @@ local query_creators = [[
       INNER JOIN creatorTypes ON itemCreators.creatorTypeID = creatorTypes.creatorTypeID
     ]]
 
+local query_attachment = [[
+  SELECT
+      items.key
+  FROM items
+  WHERE items.itemId = ?
+]]
+
 function M.get_items()
   local items = {}
   local raw_items = {}
@@ -112,6 +119,11 @@ function M.get_items()
     end
   end
   return items
+end
+
+function M.get_item_key(itemId)
+  local result = M.db:eval(query_attachment, itemId)
+  return result[1].key
 end
 
 return M

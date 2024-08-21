@@ -83,15 +83,28 @@ local function open_in_zotero(item_key)
   open_url(zotero_url)
 end
 
+local function get_item_path(choice)
+  local file_path = choice.path
+  local zotero_storage = vim.fn.expand(M.config.zotero_storage_path)
+
+  if string.find(file_path, 'storage:') then
+    local item_key = database.get_item_key(choice.attachment_id)
+    file_path = string.gsub(file_path, 'storage:', zotero_storage .. '/' .. item_key .. '/')
+    return file_path
+  end
+
+  if choice.link_mode == 1 then -- 1 typically means stored file
+    return zotero_storage .. '/' .. file_path
+  end
+
+  return file_path
+end
+
 local function open_attachment(item)
   local options = get_attachment_options(item)
   local function execute_option(choice)
     if choice.type == 'pdf' then
-      local file_path = choice.path
-      if choice.link_mode == 1 then -- 1 typically means stored file
-        local zotero_storage = vim.fn.expand(M.config.zotero_storage_path)
-        file_path = zotero_storage .. '/' .. file_path
-      end
+      local file_path = get_item_path(choice)
       if file_path ~= 0 then
         open_url(file_path)
       else

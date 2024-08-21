@@ -53,7 +53,7 @@ end
 local function get_attachment_options(item)
   local options = {}
   if item.attachment and item.attachment.path then
-    table.insert(options, { type = 'pdf', path = item.attachment.path, link_mode = item.attachment.link_mode })
+    table.insert(options, { type = 'pdf', path = item.attachment.path, link_mode = item.attachment.link_mode, attachment_id = item.attachment.attachment_id })
   end
   if item.DOI then
     table.insert(options, { type = 'doi', url = 'https://doi.org/' .. item.DOI })

@@ -37,7 +37,8 @@ local query_items = [[
       itemTypes.typeName,
       itemAttachments.path AS attachment_path,
       itemAttachments.contentType AS attachment_content_type,
-      itemAttachments.linkMode AS attachment_link_mode
+      itemAttachments.linkMode AS attachment_link_mode,
+      itemAttachments.itemId AS attachment_id
     FROM
       items
       INNER JOIN itemData ON itemData.itemID = items.itemID
@@ -90,6 +91,7 @@ function M.get_items()
       raw_items[v.key].attachment.path = v.attachment_path
       raw_items[v.key].attachment.content_type = v.attachment_content_type
       raw_items[v.key].attachment.link_mode = v.attachment_link_mode
+      raw_items[v.key].attachment.attachment_id = v.attachment_id
     end
     if v.fieldName == 'DOI' then
       raw_items[v.key].DOI = v.value
